@@ -1,4 +1,6 @@
-import { FC } from 'react';
+'use client';
+import { FC, useTransition } from 'react';
+import { completeTodo } from '@/utils/actions';
 
 type Props = {
   todo: {
@@ -10,9 +12,17 @@ type Props = {
 };
 
 const Todo: FC<Props> = ({ todo }) => {
+  const [isPending, startTransition] = useTransition();
+  const complete = () => startTransition(() => completeTodo(todo.id));
+
   return (
-    <div>
-      <p>{todo.content}</p>
+    <div
+      className={`border border-white/20 max-w-xs mx-4 py-3 px-2 cursor-pointer ${
+        todo.completed ? 'line-through text-green-800' : ''
+      } `}
+      onClick={complete}
+    >
+      {todo.content}
     </div>
   );
 };
